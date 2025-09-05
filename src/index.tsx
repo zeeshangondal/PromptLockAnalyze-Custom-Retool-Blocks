@@ -1,29 +1,29 @@
-import React, { FC, useEffect, useState } from 'react'
+import React, { FC, useState } from 'react'
 import { Retool } from '@tryretool/custom-component-support'
 
 export const PromptLockAnalyze: FC = () => {
-  const [apiKey] = Retool.useStateString({
+  const [apiKey, setApiKey] = Retool.useStateString({
     name: 'apiKey',
     initialValue: '',
     inspector: 'text',
     label: 'API Key'
   })
 
-  const [text] = Retool.useStateString({
+  const [text, setText] = Retool.useStateString({
     name: 'text',
     initialValue: '',
     inspector: 'text',
     label: 'Prompt'
   })
 
-  const [complianceFrameworksStr] = Retool.useStateString({
+  const [complianceFrameworksStr, setComplianceFrameworksStr] = Retool.useStateString({
     name: 'compliance_frameworks',
     initialValue: '[]',
     inspector: 'text',
     label: 'Compliance Frameworks'
   })
 
-  const [actionOnHighRisk] = Retool.useStateString({
+  const [actionOnHighRisk, setActionOnHighRisk] = Retool.useStateString({
     name: 'action_on_high_risk',
     initialValue: '',
     inspector: 'text',
@@ -54,9 +54,7 @@ export const PromptLockAnalyze: FC = () => {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
 
-  useEffect(() => {
-    if (!apiKey || !text || !actionOnHighRisk) return
-
+  const handleAnalyze = () => {
     setLoading(true)
     setError('')
 
@@ -94,7 +92,7 @@ export const PromptLockAnalyze: FC = () => {
       })
       .then((data) => {
         setCleanText(data.clean_text ?? '')
-        setRiskScore((data.risk_score ?? 0))
+        setRiskScore(data.risk_score ?? 0)
         setViolations(JSON.stringify(data.violations ?? []))
       })
       .catch((err) => {
@@ -104,7 +102,9 @@ export const PromptLockAnalyze: FC = () => {
         setViolations('[]')
       })
       .finally(() => setLoading(false))
-  }, [apiKey, text, complianceFrameworksStr, actionOnHighRisk])
+  }
+
+  const isAnalyzeDisabled = !apiKey || !text || !complianceFrameworksStr || !actionOnHighRisk
 
   return (
     <div style={{ 
@@ -137,6 +137,98 @@ export const PromptLockAnalyze: FC = () => {
         }}></span>
         PromptLock /v1/analyz
       </h3>
+
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: '12px', marginBottom: '24px' }}>
+        <div>
+          <label style={{ fontWeight: 600, color: '#374151', marginBottom: '4px', display: 'block' }}>
+            API Key
+          </label>
+          <input 
+            type="text" 
+            value={apiKey} 
+            onChange={(e) => setApiKey(e.target.value)} 
+            style={{
+              width: '100%',
+              padding: '8px',
+              borderRadius: '4px',
+              border: '1px solid #d1d5db'
+            }} 
+            placeholder="Enter your API key"
+          />
+        </div>
+
+        <div>
+          <label style={{ fontWeight: 600, color: '#374151', marginBottom: '4px', display: 'block' }}>
+            Prompt
+          </label>
+          <textarea
+            value={text}
+            onChange={(e) => setText(e.target.value)}
+            style={{
+              width: '100%',
+              padding: '8px',
+              borderRadius: '4px',
+              border: '1px solid #d1d5db',
+              minHeight: '60px'
+            }}
+            placeholder="Type the prompt to analyze"
+          />
+        </div>
+
+        <div>
+          <label style={{ fontWeight: 600, color: '#374151', marginBottom: '4px', display: 'block' }}>
+            Compliance Frameworks
+          </label>
+          <input
+            type="text"
+            value={complianceFrameworksStr}
+            onChange={(e) => setComplianceFrameworksStr(e.target.value)}
+            style={{
+              width: '100%',
+              padding: '8px',
+              borderRadius: '4px',
+              border: '1px solid #d1d5db'
+            }}
+            placeholder='e.g. ["HIPAA", "GDPR", "PCI"]'
+          />
+        </div>
+
+        <div>
+          <label style={{ fontWeight: 600, color: '#374151', marginBottom: '4px', display: 'block' }}>
+            Action on High Risk
+          </label>
+          <input
+            type="text"
+            value={actionOnHighRisk}
+            onChange={(e) => setActionOnHighRisk(e.target.value)}
+            style={{
+              width: '100%',
+              padding: '8px',
+              borderRadius: '4px',
+              border: '1px solid #d1d5db'
+            }}
+            placeholder="From: flag, block, redact, score"
+          />
+        </div>
+      </div>
+
+      <div style={{ marginBottom: '24px' }}>
+        <button
+          disabled={isAnalyzeDisabled}
+          onClick={handleAnalyze}
+          style={{
+            padding: '10px 16px',
+            backgroundColor: isAnalyzeDisabled ? '#9ca3af' : '#3b82f6',
+            color: '#ffffff',
+            borderRadius: '6px',
+            border: 'none',
+            cursor: isAnalyzeDisabled ? 'not-allowed' : 'pointer',
+            fontWeight: '600'
+          }}
+        >
+          Analyze
+        </button>
+      </div>
 
       {loading && (
         <div style={{
