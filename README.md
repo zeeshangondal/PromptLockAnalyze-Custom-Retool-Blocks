@@ -1,4 +1,3 @@
-````markdown
 # PromptLock – Retool Custom Component
 
 A Retool Custom Component that sends a prompt to the PromptLock `/v1/analyze` API and displays:
