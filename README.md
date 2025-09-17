@@ -1,9 +1,10 @@
 # PromptLock – Retool Custom Component
 
 A Retool Custom Component that sends a prompt to the PromptLock `/v1/analyze` API and displays:
-- **Redacted Prompt**
-- **Risk Score**
-- **Violations**
+
+* **Redacted Prompt**
+* **Risk Score**
+* **Violations**
 
 These values are also exposed to your Retool app, so you can reference them anywhere (e.g. `{{ myBlockId.redacted_prompt }}`).
 
@@ -11,19 +12,19 @@ These values are also exposed to your Retool app, so you can reference them anyw
 
 ## Features
 
-- Drag-and-drop custom block in Retool
-- Inputs: **API Key**, **Prompt**, **Compliance Frameworks**, **Action on High Risk**
-- Outputs: **redacted_prompt**, **risk_score**, **violations**
-- Easy dev & deploy via `retool-ccl`
+* Drag-and-drop custom block in Retool
+* Inputs: **API Key**, **Prompt**, **Compliance Frameworks**, **Action on High Risk**
+* Outputs: **redacted\_prompt**, **risk\_score**, **violations**
+* Easy dev & deploy via `retool-ccl`
 
 ---
 
 ## Prerequisites
 
-- Retool org (Cloud or self-hosted) with permission to add custom components
-- Your org **subdomain** (e.g. `myteam` in `myteam.retool.com`)
-- **Retool API Key** (create in your Retool app → Settings)
-- Node.js 18+ and npm
+* Retool org (Cloud or self-hosted) with permission to add custom components
+* Your org **subdomain** (e.g. `myteam` in `myteam.retool.com`)
+* **Retool API Key** (create in your Retool app → Settings)
+* Node.js 18+ and npm
 
 > You’ll provide subdomain + API key during `npx retool-ccl login`.
 
@@ -32,10 +33,11 @@ These values are also exposed to your Retool app, so you can reference them anyw
 ## Quick Start
 
 1. **Clone the repo**
+
    ```bash
    git clone 
    cd PromptLock-custom-component
-````
+   ```
 
 2. **Install packages**
 
@@ -79,13 +81,16 @@ These values are also exposed to your Retool app, so you can reference them anyw
 ## Using the Component in Retool
 
 1. In the Retool App editor, open **Components → Custom components**.
+
 2. Drag the **PromptLock** block onto the canvas.
+
 3. Fill the inputs:
 
    * **API Key** – your PromptLock service key
    * **Prompt** – the text you want to analyze
    * **Compliance Frameworks** – see formats below
    * **Action on High Risk** – one of: `flag | redact | block | score`
+
 4. Click **Analyze**. Results render inside the block, and are also available as Retool state.
 
 ### Referencing Outputs
@@ -123,7 +128,6 @@ Common presets:
 One of: `flag`, `redact`, `block`, `score`.
 
 ---
-
 
 ## Troubleshooting
 
