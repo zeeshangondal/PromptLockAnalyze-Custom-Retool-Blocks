@@ -18,10 +18,11 @@ export const PromptLockAnalyze: FC = () => {
 
   const [complianceFrameworksStr, setComplianceFrameworksStr] = Retool.useStateString({
     name: 'compliance_frameworks',
-    initialValue: '[]',
+    initialValue: '[]', 
     inspector: 'text',
     label: 'Compliance Frameworks'
   })
+
 
   const [actionOnHighRisk, setActionOnHighRisk] = Retool.useStateString({
     name: 'action_on_high_risk',
@@ -106,6 +107,25 @@ export const PromptLockAnalyze: FC = () => {
 
   const isAnalyzeDisabled = !apiKey || !text || !complianceFrameworksStr || !actionOnHighRisk
 
+  const complianceOptions = [
+    { label: 'Select Compliance Frameworks', value: '' },
+    { label: 'Prompt Injection', value: '["GDPR"]' },
+    { label: 'PCI', value: '["PCI"]' },
+    { label: 'GDPR', value: '["GDPR"]' },
+    { label: 'HIPAA', value: '["HIPAA"]' },
+    { label: 'PCI + GDPR', value: '["PCI","GDPR"]' },
+    { label: 'GDPR + HIPAA', value: '["GDPR","HIPAA"]' },
+    { label: 'All', value: '["PCI","GDPR","HIPAA"]' }
+  ]
+
+  const actionOptions = [
+    { label: 'Select Action on High Risk', value: '' },
+    { label: 'flag', value: 'flag' },
+    { label: 'redact', value: 'redact' },
+    { label: 'block', value: 'block' },
+    { label: 'score', value: 'score' }
+  ]
+
   return (
     <div style={{ 
       fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif', 
@@ -135,10 +155,11 @@ export const PromptLockAnalyze: FC = () => {
           backgroundColor: '#3b82f6',
           borderRadius: '50%'
         }}></span>
-        PromptLock /v1/analyz
+        PromptLock /v1/analyze
       </h3>
 
       <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: '12px', marginBottom: '24px' }}>
+        {/* API Key Field */}
         <div>
           <label style={{ fontWeight: 600, color: '#374151', marginBottom: '4px', display: 'block' }}>
             API Key
@@ -157,6 +178,7 @@ export const PromptLockAnalyze: FC = () => {
           />
         </div>
 
+        {/* Prompt Field */}
         <div>
           <label style={{ fontWeight: 600, color: '#374151', marginBottom: '4px', display: 'block' }}>
             Prompt
@@ -175,12 +197,12 @@ export const PromptLockAnalyze: FC = () => {
           />
         </div>
 
+        {/* Compliance Frameworks Dropdown */}
         <div>
           <label style={{ fontWeight: 600, color: '#374151', marginBottom: '4px', display: 'block' }}>
             Compliance Frameworks
           </label>
-          <input
-            type="text"
+          <select
             value={complianceFrameworksStr}
             onChange={(e) => setComplianceFrameworksStr(e.target.value)}
             style={{
@@ -189,16 +211,21 @@ export const PromptLockAnalyze: FC = () => {
               borderRadius: '4px',
               border: '1px solid #d1d5db'
             }}
-            placeholder='e.g. ["HIPAA", "GDPR", "PCI"]'
-          />
+          >
+            {complianceOptions.map((opt) => (
+              <option key={opt.value} value={opt.value}>
+                {opt.label}
+              </option>
+            ))}
+          </select>
         </div>
 
+        {/* Action on High Risk Dropdown */}
         <div>
           <label style={{ fontWeight: 600, color: '#374151', marginBottom: '4px', display: 'block' }}>
             Action on High Risk
           </label>
-          <input
-            type="text"
+          <select
             value={actionOnHighRisk}
             onChange={(e) => setActionOnHighRisk(e.target.value)}
             style={{
@@ -207,11 +234,17 @@ export const PromptLockAnalyze: FC = () => {
               borderRadius: '4px',
               border: '1px solid #d1d5db'
             }}
-            placeholder="From: flag, block, redact, score"
-          />
+          >
+            {actionOptions.map((a) => (
+              <option key={a.value} value={a.value}>
+                {a.label}
+              </option>
+            ))}
+          </select>
         </div>
       </div>
 
+      {/* Analyze Button */}
       <div style={{ marginBottom: '24px' }}>
         <button
           disabled={isAnalyzeDisabled}
