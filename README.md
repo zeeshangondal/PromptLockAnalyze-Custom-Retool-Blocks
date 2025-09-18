@@ -1,5 +1,12 @@
 # PromptLock – Retool Custom Component
 
+## API Key
+
+You can acquire the API key from [https://promptlock.io/](https://promptlock.io/).  
+This key is required to authenticate with the `/v1/analyze` API and must be provided in the `API_Key` field when configuring the custom node.
+
+## Overview
+
 A Retool Custom Component that sends a prompt to the PromptLock `/v1/analyze` API and displays:
 
 * **Redacted Prompt**
