@@ -62,6 +62,10 @@ export const PromptLockAnalyze: FC = () => {
     let frameworks: string[] = []
     try {
       frameworks = JSON.parse(complianceFrameworksStr)
+      console.log(frameworks)
+      if(frameworks.find((e) => e=="Prompt_Injection")){
+        frameworks=[]
+      }
     } catch {
       frameworks = complianceFrameworksStr
         .split(',')
@@ -109,7 +113,7 @@ export const PromptLockAnalyze: FC = () => {
 
   const complianceOptions = [
     { label: 'Select Compliance Frameworks', value: '' },
-    { label: 'Prompt Injection', value: '["GDPR"]' },
+    { label: 'Prompt Injection', value: '["Prompt_Injection"]' },
     { label: 'PCI', value: '["PCI"]' },
     { label: 'GDPR', value: '["GDPR"]' },
     { label: 'HIPAA', value: '["HIPAA"]' },
@@ -324,7 +328,7 @@ export const PromptLockAnalyze: FC = () => {
               textTransform: 'uppercase',
               letterSpacing: '0.05em'
             }}>
-              Redacted Prompt
+              Result
             </p>
             <p style={{ 
               margin: '0', 
